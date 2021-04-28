@@ -25,10 +25,26 @@
   }
 }
 
+.group {
+  display: flex;
+  flex-direction: column;
+  .title {
+    background-color: #f5f5f5;
+  }
+  .content {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+  }
+}
+
 .card {
   display: flex;
   flex-direction: column;
   padding: 8px;
   height: 60px;
   margin-bottom: 8px;
+}
+.draggingCard {
+  opacity: 0;
 }

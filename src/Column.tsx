@@ -1,24 +1,29 @@
-import React, { FC, useMemo } from "react";
+import React, { FC } from "react";
 import { Droppable } from "react-beautiful-dnd";
 
-import { ColumnData } from "./store";
+import { CardData, ColumnData } from "./store";
 import classes from "./index.less";
-import Card from "./Card";
+import Group from "./Group";
 
 interface ColumnProps {
   column: ColumnData;
+  dragCard?: CardData;
 }
 
 const Column: FC<ColumnProps> = (props) => {
-  const { column } = props;
-  const cardItems = useMemo(() => {
-    return column.cards.map((card, index) => {
-      return <Card key={card.id} index={index} card={card} />;
-    });
-  }, [column.cards]);
+  const { column, dragCard } = props;
+  // const groupItems = useMemo(() => {
+  //   return column.groups.map((group, index) => {
+  //     return <Group key={group.id} index={index} group={group} />;
+  //   });
+  // }, [column.groups]);
 
   return (
-    <Droppable droppableId={column.id}>
+    <Droppable
+      droppableId={column.id}
+      direction="horizontal"
+      isDropDisabled={dragCard?.colId === column.id}
+    >
       {(provided) => {
         return (
           <div
@@ -28,8 +33,16 @@ const Column: FC<ColumnProps> = (props) => {
           >
             <div className={classes.header}>{column.title}</div>
             <div className={classes.content}>
-              {cardItems}
-              {provided.placeholder}
+              {column.groups.map((group, index) => {
+                return (
+                  <Group
+                    key={group.id}
+                    index={index}
+                    group={group}
+                    placeholder={provided.placeholder}
+                  />
+                );
+              })}
             </div>
           </div>
         );
